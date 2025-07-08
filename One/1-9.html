@@ -1,0 +1,21 @@
+<canvas id = "myCanvas" height =500 width=500>您的浏览器不支持Canvas。</canvas>
+<script type = "text/javascript">
+  function draw()
+  {
+    var c=document.getElementById("myCanvas");
+    var ctx = c. getContext("2d" );
+    ctx.fillStyle = "blue";
+    ctx.fillRect(0,0,50,50);
+    ctx.fillStyle = "red";
+    ctx.globalCompositeOperation = "source-out";//dfdf
+    var centerX = 50;
+    var centerY = 50;
+    var radius = 25;
+    var startingAngle = 0;
+    var endingAngle = 2 *Math.PI;
+    ctx.beginPath();
+    ctx.arc(centerX, centerY, radius, startingAngle, endingAngle, false); //绘制圆
+    ctx.fill( );
+  }
+  window.addEventListener("load", draw, true);
+</script>
