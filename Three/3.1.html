@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>利润增长率折线图</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 2px;
+    }
+    .axis {
+      font: 10px sans-serif;
+      fill:#333;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center;">2020 年前六个月利润增长率</h1>
+<svg id="lineChart" width="600" height="400"></svg>
+
+<script>
+  // 数据
+  const data = [
+    { month: 1, profitGrowthRate: 23.24 },
+    { month: 2, profitGrowthRate: 72.14 },
+    { month: 3, profitGrowthRate: 36.64 },
+    { month: 4, profitGrowthRate: 58.42 },
+    { month: 5, profitGrowthRate: 10.80 },
+    { month: 6, profitGrowthRate: 85.67 }
+  ];
+
+  // 设置 SVG 尺寸
+  const svg = d3.select("#lineChart"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height"),
+    margin = { top: 20, right: 30, bottom: 30, left: 40 };
+
+  const x = d3.scaleLinear()
+    .domain([1, 6]) // 月份范围
+    .range([margin.left, width - margin.right]);
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d.profitGrowthRate)]) // 利润增长率的最大值
+    .range([height - margin.bottom, margin.top]);
+
+  // 线生成器
+  const line = d3.line()
+    .x(d => x(d.month)) // x 轴访问器
+    .y(d => y(d.profitGrowthRate)); // y 轴访问器
+
+  // 绘制线
+  svg.append("path")
+    .datum(data) // 绑定数据
+    .attr("class", "line")
+    .attr("d", line); // 生成路径
+
+  // 绘制坐标轴
+  svg.append("g")
+    .attr("transform", `translate(0,${height - margin.bottom})`)
+    .call(d3.axisBottom(x)); // x 轴
+
+  svg.append("g")
+    .attr("transform", `translate(${margin.left},0)`)
+    .call(d3.axisLeft(y)); // y 轴
+
+  // 添加数据点
+  svg.selectAll(".dot")
+    .data(data)
+    .enter().append("circle")
+    .attr("class", "dot")
+    .attr("cx", d => x(d.month))
+    .attr("cy", d => y(d.profitGrowthRate))
+    .attr("r", 5)
+    .style("fill", "steelblue");
+</script>
+</body>
+</html>

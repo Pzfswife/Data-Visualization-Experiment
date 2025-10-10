@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>消费品支出柱状图</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    canvas {
+      max-width: 800px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align: center;">某大学生月购买消费品支出情况</h1>
+<canvas id="barChart"></canvas>
+<script>
+  const ctx = document.getElementById('barChart').getContext('2d');
+  const data = {
+    labels: ['日用品', '奶茶等饮品', '衣服', '买U盘', '外卖', '文具和书包'],
+    datasets: [{
+      label: '支出（元）',
+      data: [200, 160, 227, 148, 207, 77],
+      backgroundColor: [
+        'rgba(255, 99, 132, 0.6)',
+        'rgba(54, 162, 235, 0.6)',
+        'rgba(255, 206, 86, 0.6)',
+        'rgba(75, 192, 192, 0.6)',
+        'rgba(153, 102, 255, 0.6)',
+        'rgba(255, 159, 64, 0.6)'
+      ],
+      borderColor: 'rgba(0, 0, 0, 1)',
+      borderWidth: 1
+    }]
+  };
+
+  const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+      },
+      tooltip: {
+        callbacks: {
+          label: function(tooltipItem) {
+            return tooltipItem.label + ': ' + tooltipItem.raw + ' 元';
+          }
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: '支出（元）'
+        }
+      },
+      x: {
+        title: {
+          display: true,
+          text: '消费品'
+        }
+      }
+    }
+  };
+
+  const barChart = new Chart(ctx, {
+    type: 'bar',
+    data: data,
+    options: options
+  });
+</script>
+</body>
+</html>

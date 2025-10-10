@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>环形图</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .chart {
+      display: inline-block;
+      margin: 20px;
+    }
+  </style>
+</head>
+<body>
+<div class="chart" id="donut"></div>
+
+<script>
+  // 数据
+  const donutData = [10, 20, 50, 30, 80];
+
+  // 环形图
+  const width = 300, height = 300;
+  const radius = Math.min(width, height) / 2;
+
+  const donutSVG = d3.select("#donut")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .append("g")
+    .attr("transform", `translate(${width / 2}, ${height / 2})`);
+
+  const arc = d3.arc()
+    .innerRadius(radius * 0.5) // 内半径
+    .outerRadius(radius); // 外半径
+
+  const pie = d3.pie().value(d => d).sort(null); // 不按顺序排序
+
+  const arcs = donutSVG.selectAll('path')
+    .data(pie(donutData))
+    .enter().append('path')
+    .attr('d', arc)
+    .attr('fill', (d, i) => d3.schemeCategory10[i]); // 设置颜色
+
+  // 添加数据标签
+  donutSVG.selectAll('text')
+    .data(pie(donutData))
+    .enter().append('text')
+    .attr('transform', d => `translate(${arc.centroid(d)})`)
+    .attr('dy', '.35em')
+    .attr('text-anchor', 'middle')
+    .text(d => d.data); // 显示数据值
+</script>
+</body>
+</html>
