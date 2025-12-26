@@ -1,0 +1,76 @@
+#phone-title{
+    display: flex;
+    justify-content: space-between;
+    height: 35px;
+    background-color: #212121;
+    color: white;
+    font-size: 12px;
+}
+
+/* 信号区 */
+#phone-title-left{
+    width: 33%;
+    display: flex;
+    /* 默认值，行显示 */
+    flex-flow: row;
+    /* 默认值，左侧起点 */
+    justify-content: flex-start;
+    /* 垂直居中 */
+    align-items: center;
+}
+
+/* 有信号 */
+.signal,.no-signal{
+    height: 7px;
+    width: 7px;
+    border-radius: 50%;
+    border: 1px white solid;
+    background-color: white;
+    margin: 1px;
+
+}
+/* 无信号 */
+.no-signal{
+    background-color: #212121;
+}
+
+/* 时间 */
+#phone-title-center{
+    width: 34%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* 电池 */
+#phone-title-right{
+    width: 33%;
+    display: flex;
+    /* 居右 */
+    justify-content: flex-end;
+    align-items: center;
+}
+
+/* 电池壳  nth唯一从1开始数*/
+#phone-title-right div:nth-child(2){
+    border: 1px white solid;
+    height: 11px;
+    width: 30px;
+    margin-left: 4px;
+}
+
+/* 电量 */
+#phone-title-right div:nth-child(2) div{
+    height: 10px;
+    width: 25px;
+    background-color: #17b858;
+}
+
+/* 正极 */
+#phone-title-right div:nth-child(3){
+    background-color: white;
+    height: 7px;
+    width: 2px;
+    margin-right: 6px;
+}
+

@@ -1,0 +1,51 @@
+#header{
+    /* 向下渐变背景 */
+    background-image: linear-gradient(to bottom,#212121,#616161);
+    min-height: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    margin-top: -1px;
+}
+
+.header-font{
+    color: white;
+    line-height: 30px;
+    font-weight: 700;
+}
+
+/* 返回 */
+#header-control{
+    width: 33%;
+    padding-left: 6px;
+    display: flex;
+    align-items: center;
+}
+#header-control div:nth-child(1){
+    height: 18px;
+    width: 18px;
+    background: url(../img/icon/material/返回.svg) no-repeat;
+    /* 图片需要适应容器的尺寸 */
+    background-size:contain;
+}
+
+/* 信息条 */
+#msg{
+    width: 34%;
+    line-height: 30px;
+}
+
+/* 加号 */
+#function{
+    width: 33%;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 8px;
+}
+#add{
+    height: 22px;
+    width: 22px;
+    background: url(../img/icon/material/加号.svg);
+    background-size: contain;
+}

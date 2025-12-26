@@ -1,0 +1,10 @@
+/* 我 */
+#wrap-me{
+    height: 100%;
+    /* 占用剩余布局 */
+    flex-grow: 1;
+    /* 裁剪剩余内容，滚动显示 */
+    overflow-y: scroll;
+    background-color: rgb(138, 31, 94);
+    display: none;
+}

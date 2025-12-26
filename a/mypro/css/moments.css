@@ -1,0 +1,253 @@
+/* 朋友圈 */
+#moments{
+    height: 100%;
+    flex-grow: 1;
+    overflow: scroll;
+}
+
+/* 用户背景 */
+#huge-screen{
+    width: 100%;
+    height: 200px;
+    background: url(../img/images/b.png) no-repeat;
+    /* 按容器扩展最大，超出部分不显示 */
+    background-size: cover;
+    background-position: center;
+}
+
+/* 用户信息容器 */
+#user{
+    height: 72px;
+    width: 90%;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 auto;
+    position: relative;
+    top: 150px;
+}
+/* 用户名 */
+#user-name{
+    padding-right: 10px;
+    font-size: 30px;
+    color: #228698;
+    display: flex;
+    align-items: center;
+    /* 字符间距 */
+    letter-spacing: 2px;
+}
+/* 头像 */
+#user-photo{
+    border: 1px solid #b6b8c3;
+    box-shadow: 0 0 5px whitesmoke inset;
+}
+#user-photo img{
+    height: 70px;
+    width: 70px;
+}
+
+/* 新消息通知区 */
+#notification{
+    height: 40px;
+}
+
+/* 每条消息容器 */
+.moment-content{
+    width: 100%;
+    border-bottom: 1px solid #EEEEEE;
+    padding: 10px 0 14px 0;
+    display: flex;
+    justify-content: center;
+}
+
+/* 左侧好友头像 */
+.moment-content-left{
+    width: 90px;
+    display: flex;
+    justify-content: flex-end;
+}
+.moment-content-left img{
+    width: 50px;
+    height: 50px;
+    border-radius: 6%;
+    margin-right: 6px;
+}
+
+/* 右侧信息容器 */
+.moment-content-right{
+    width: 100%;
+    padding: 0 10px 0 5px;
+}
+/* 用户名和信息 */
+.moment-content-username{
+    width: 100%;
+    font-weight: 700;
+    color: #286090;
+    margin-bottom: 4px;
+}
+.moment-content-text{
+    width: 100%;
+    font-weight: 400;
+    color: #212121;
+}
+
+/* 信息图片 */
+.moment-content-imgs{
+    margin: 6px 0 6px 0;
+    min-height: 120px;
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+/* 一张图片 */
+.user-imgs-single{
+    height: 120px;
+    width: 100%;
+    max-width: 220px;
+    min-width: 160px;
+    background-position: center;
+    background-size: cover;
+}
+
+/* 多张图片 */
+.user-imgs-multi{
+    height: 80px;
+    width: 80px;
+    background-position: center;
+    background-size: cover;
+    margin: 6px 6px 0 0;
+}
+/* 回复区容器 */
+.moment-function{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+/* 时间 */
+.moment-function-time{
+    font-weight: 300;
+    font-size: 10px;
+    width: 100px;
+    color: gray;
+}
+/* 弹出层图标 */
+.moment-function-right{
+    width: 20px;
+    background: url(../img/icon/moments/回复区域.svg) no-repeat;
+    background-position: center;
+    background-size: cover;
+    position: relative;
+}
+
+/* 弹出层容器 */
+.moment-function-control{
+    background-color: #424242;
+    height: 30px;
+    width: 140px;
+    position: absolute;
+    right: 26px;
+    top: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 10px;
+    border-radius: 6px;
+}
+/* 第一层子元素 */
+.moment-function-control>div{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+    align-items: center;
+    height: 20px;
+    width: 65px;
+}
+/* 赞的图 */
+.moment-function-control div:nth-child(1) div:nth-child(1){
+    background: url(../img/icon/moments/赞-02.svg) no-repeat;
+    height: 18px;
+    width: 18px;
+    background-position: center;
+    background-size: contain;
+}
+/* 赞 */
+.moment-function-control div:nth-child(1) div:nth-child(2){
+    height: 20px;
+    width: 20px;
+    padding: 2px 0 0 6px;
+}
+/* 评论的图 */
+.moment-function-control div:nth-child(2) div:nth-child(1){
+    background: url(../img/icon/moments/评论.svg) no-repeat;
+    height: 18px;
+    width: 18px;
+    background-position: center;
+    background-size: contain;
+}
+/* 评论 */
+.moment-function-control div:nth-child(2) div:nth-child(2){
+    height: 20px;
+    width: 30px;
+    padding: 2px 0 0 6px;
+}
+/* 点赞箭头 */
+#triangle-up{
+    position: relative;
+    left: 10px;
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 5px solid #EEEEEE;;
+}
+
+.comments-board{
+    background-color: #EEEEEE;
+}
+
+.upvotes{
+    border-bottom: 1px solid #E0E0E0;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+.upvotes-img{
+    height: 22px;
+    width: 22px;
+    background: url(../img/icon/moments/赞.svg) no-repeat;
+    background-size: 60%;
+    background-position: center;
+}
+.upvotes-names{
+    height: 22px;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+.name{
+    font-size: 12px;
+    color: #286090;
+    font-weight: 700;
+}
+.comments{
+    height: 22px;
+}
+.comment{
+    line-height: 22px;
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+}
+.comment-name{
+    margin-left: 4px;
+    font-size: 12px;
+    color: #286090;
+    font-weight: 700;
+}
+.comment-content{
+    padding-left: 6px;
+    font-size: 12px;
+    color: #424242;
+    font-weight: 500;
+}

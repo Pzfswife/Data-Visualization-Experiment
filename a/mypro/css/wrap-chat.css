@@ -1,0 +1,112 @@
+/* 微信列表 */
+#wrap-chat{
+    height: 100%;
+    /* 占用剩余布局 */
+    flex-grow: 1;
+    /* 裁剪剩余内容，滚动显示 */
+    overflow-y: scroll;
+}
+
+/* 搜索 */
+#search{
+    height: 40px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    border-bottom: 1px solid gainsboro;
+    box-shadow: 0 2px ghostwhite;
+}
+/* 输入框 */
+#search input{
+    height: 26px;
+    width: 99%;
+    border: 1px solid gainsboro;
+    box-shadow: 0 0 10px gainsboro inset;
+    background: url(../img/icon/control/搜索.svg) no-repeat;
+    background-size: 16px;
+    background-position: center;
+}
+/* 获取焦点取消背景 */
+#search input:focus{
+    background: none;
+}
+
+/* 列表容器 */
+#lists{
+    display: flex;
+    flex-flow: column;
+    overflow-y: scroll;
+    width: 100%;
+    margin: 0 auto;
+}
+/* 每条信息容器 */
+.content{
+    height: 64px;
+    background-color: #fafafa;
+    border-bottom: 1px gainsboro solid;
+    padding: 0 4px 0 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+/* 左侧头像 */
+.content-left{
+    height: 52px;
+    width: 52px;
+}
+.content-left img{
+    height: 52px;
+    width: 52px;
+    border-radius: 6px;
+}
+ /* 中间用户名和聊天信息 */
+ .content-center{
+    height: 52px;
+    flex-grow: 1;
+    padding-left: 8px;
+    display: flex;
+    flex-flow: column;
+    justify-content: space-around;
+    /* 强制不换行 */
+    white-space: nowrap;
+    overflow: hidden;
+ }
+ .username{
+    width: 100%;
+    height: 24px;
+    font-size: 16px;
+    color: #424242;
+ }
+ .text{
+    width: 100%;
+    height: 20px;
+    font-size: 14px;
+    color: #9e9e9e;
+ }
+ /* 语音 */
+ .text-radio{
+    color: #bf360c;
+ }
+ /* 右侧时间 */
+ .content-right{
+    height: 52px;
+    width: 60px;
+    font-size: 10px;
+    text-align: right;
+    color: #9e9e9e;
+ }
+
+ /* 新消息 */
+ .new-msg{
+    height: 14px;
+    width: 14px;
+    border-radius: 50%;
+    background-color: red;
+    font-weight: 600;
+    font-size: 10px;
+    color: white;
+    text-align: center;
+    position: relative;
+    top: -55px;
+    left: 45px;
+ }
