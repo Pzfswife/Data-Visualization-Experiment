@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>居民消费支出柱状图</title>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <style>
+    table {
+      border-collapse: collapse;
+      margin-left: 20px;
+    }
+    th, td {
+      border: 1px solid #333;
+      padding: 8px;
+      text-align: left;
+    }
+  </style>
+</head>
+<body>
+<h1>某市 50 户居民购买消费品支出分组</h1>
+<div style="display: flex;">
+  <svg width="600" height="400"></svg>
+  <table>
+    <thead>
+    <tr>
+      <th>组别</th>
+      <th>居民户数</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>900 以下</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <td>900～1000</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>1000～1100</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>1100～1200</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>1200～1300</td>
+      <td>10</td>
+    </tr>
+    <tr>
+      <td>1300～1400</td>
+      <td>7</td>
+    </tr>
+    <tr>
+      <td>1400～1500</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>1500～1600</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>1600 以上</td>
+      <td>1</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  var data = [
+    { "group": "1", "households": 5 },
+    { "group": "2", "households": 1 },
+    { "group": "3", "households": 10 },
+    { "group": "4", "households": 10 },
+    { "group": "5", "households": 10 },
+    { "group": "6", "households": 7 },
+    { "group": "7", "households": 4 },
+    { "group": "8", "households": 2 },
+    { "group": "9", "households": 1 }
+  ];
+
+  var svg = d3.select("svg");
+
+  var xScale = d3.scaleBand()
+    .domain(data.map(function(d) { return d.group; }))
+    .range([0, 500])
+    .padding(0.1);
+
+  var yScale = d3.scaleLinear()
+    .domain([0, d3.max(data, function(d) { return d.households; })])
+    .range([350, 30]);
+
+  // 添加柱状图
+  svg.append("g")
+    .attr("transform", "translate(50,0)")
+    .selectAll("rect")
+    .data(data)
+    .enter()
+    .append("rect")
+    .attr("x", function(d) { return xScale(d.group); })
+    .attr("y", function(d) { return yScale(d.households); })
+    .attr("width", xScale.bandwidth())
+    .attr("height", function(d) { return 350 - yScale(d.households); })
+    .attr("fill", "steelblue");
+
+  // 添加柱状图标签
+  svg.append("g")
+    .attr("transform", "translate(50,0)")
+    .selectAll("text")
+    .data(data)
+    .enter()
+    .append("text")
+    .attr("x", function(d) { return xScale(d.group) + xScale.bandwidth() / 2; })
+    .attr("y", function(d) { return yScale(d.households) - 10; })
+    .text(function(d) { return d.households; })
+    .attr("text-anchor", "middle");
+
+  // 添加X轴
+  svg.append("g")
+    .attr("transform", "translate(50,350)")
+    .call(d3.axisBottom(xScale));
+
+  // 添加Y轴
+  svg.append("g")
+    .attr("transform", "translate(50,0)")
+    .call(d3.axisLeft(yScale));
+
+  // 添加图例
+  var legend = svg.append("g")
+    .attr("transform", "translate(500, 50)");
+
+  legend.append("rect")
+    .attr("width", 15)
+    .attr("height", 15)
+    .attr("fill", "steelblue");
+
+  legend.append("text")
+    .attr("x", 20)
+    .attr("y", 12)
+    .text("居民消费支出")
+    .attr("font-size", "12px")
+    .attr("fill", "black");
+
+</script>
+</body>
+</html>

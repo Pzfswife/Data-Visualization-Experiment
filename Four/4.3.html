@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GDP折线图</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<canvas id="gdpChart" width="800" height="400"></canvas>
+
+<script>
+  var dataset = [
+    {
+      country: "China",
+      gdp: [
+        [2000, 11920], [2001, 13170], [2002, 14550], [2003, 16500],
+        [2004, 19440], [2005, 22870], [2006, 27930], [2007, 35040],
+        [2008, 45470], [2009, 51050], [2010, 59490], [2011, 73140],
+        [2012, 83860], [2013, 103550]
+      ]
+    },
+    {
+      country: "Japan",
+      gdp: [
+        [2000, 47310], [2001, 41590], [2002, 39800], [2003, 43020],
+        [2004, 46550], [2005, 45710], [2006, 43560], [2007, 43560],
+        [2008, 48490], [2009, 50350], [2010, 54950], [2011, 59050],
+        [2012, 59370], [2013, 48980]
+      ]
+    },
+    {
+      country: "USA",
+      gdp: [
+        [2000, 102523], [2001, 105818], [2002, 115136], [2003, 122137],
+        [2004, 130366], [2005, 138146], [2006, 144518], [2007, 147128],
+        [2008, 148446], [2009, 144518], [2010, 149920], [2011, 155425],
+        [2012, 161970], [2013, 167848]
+      ]
+    },
+    {
+      country: "UK",
+      gdp: [
+        [2000, 15720], [2001, 16545], [2002, 16999], [2003, 18324],
+        [2004, 20415], [2005, 21076], [2006, 21714], [2007, 22703],
+        [2008, 22973], [2009, 21983], [2010, 22654], [2011, 23985],
+        [2012, 24703], [2013, 25320]
+      ]
+    }
+  ];
+
+  // 提取年份和GDP数据
+  const labels = dataset[0].gdp.map(item => item[0]);
+
+  const data = {
+    labels: labels,
+    datasets: dataset.map((countryData, index) => {
+      return {
+        label: countryData.country,
+        data: countryData.gdp.map(item => item[1]),
+        borderColor: getColor(index),  // 根据索引为每个国家分配不同的颜色
+        backgroundColor: getColor(index, true),
+        fill: false, // 不填充面积
+        tension: 0.1 // 曲线的平滑度
+      };
+    })
+  };
+
+  // 获取不同颜色
+  function getColor(index, isBackground = false) {
+    const colors = [
+      'rgba(255, 99, 132, 1)',   // 红色 - China
+      'rgba(54, 162, 235, 1)',   // 蓝色 - Japan
+      'rgba(255, 159, 64, 1)',   // 橙色 - USA
+      'rgba(75, 192, 192, 1)'    // 绿色 - UK
+    ];
+    return isBackground ? colors[index].replace('1)', '0.2)') : colors[index];
+  }
+
+  // 配置折线图
+  const config = {
+    type: 'line',
+    data: data,
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          mode: 'index',
+          intersect: false,
+        }
+      },
+      interaction: {
+        mode: 'index',
+        intersect: false,
+      },
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: 'Year'
+          }
+        },
+        y: {
+          title: {
+            display: true,
+            text: 'GDP (in millions)'
+          },
+          beginAtZero: true
+        }
+      }
+    }
+  };
+
+  // 渲染图表
+  const ctx = document.getElementById('gdpChart').getContext('2d');
+  new Chart(ctx, config);
+</script>
+</body>
+</html>

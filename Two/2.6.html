@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {`
+      background-color: black; /* 背景颜色 */
+    }
+  </style>
+</head>
+<body>
+<svg width="800" height="400"></svg>
+<script>
+  const svg = d3.select("svg");
+  const numCircles = 10; // 圆的数量
+  const maxRadius = 100; // 最大半径
+  const centerX = 50; // 圆心X坐标
+  const centerY = 50; // 圆心Y坐标
+  const spacing = 30; // 圆之间的间距
+
+  // 创建圆形
+  for (let i = 0; i < numCircles; i++) {
+    const radius = (i + 1) * (maxRadius / numCircles); // 计算半径
+    const opacity = 1 - (i / numCircles); // 计算透明度
+
+    svg.append("circle")
+      .attr("cx", centerX + i * spacing) // X坐标逐渐增大
+      .attr("cy", centerY + i * spacing) // Y坐标逐渐增大
+      .attr("r", radius)
+      .attr("fill", "teal") // 圆的颜色
+      .attr("fill-opacity", opacity); // 设置透明度
+  }
+</script>
+</body>
+</html>

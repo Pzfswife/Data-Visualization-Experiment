@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>南丁格尔图</title>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5"></script>
+</head>
+<body>
+<div id="main" style="width:1000px;height:600px"></div>
+<script type="text/javascript">
+  // 初始化图表
+  var myChart = echarts.init(document.getElementById('main'));
+
+  // 配置项
+  var option = {
+    // 背景色，全局
+    backgroundColor: 'white',
+    // 文本的样式
+    textStyle: {
+      color: 'black'
+    },
+    series: [
+      {
+        name: '数据来源',
+        type: 'pie',
+        radius: '55%',
+        data: [
+          { name: "Mon:120", value: 120, itemStyle: { color: 'blue' } },   // Monday
+          { name: "Tue:200", value: 200, itemStyle: { color: 'orange' } },   // Tuesday
+          { name: "Wed:150", value: 150, itemStyle: { color: 'green' } },   // Wednesday
+          { name: "Thu:80", value: 80, itemStyle: { color: 'red' } },    // Thursday
+          { name: "Fri:70", value: 70, itemStyle: { color: 'purple' } },    // Friday
+          { name: "Sat:110", value: 110, itemStyle: { color: 'brown' } },   // Saturday
+          { name: "Sun:130", value: 130, itemStyle: { color: 'pink' } }    // Sunday
+        ],
+        roseType: 'angle',
+        label: {
+          normal: {
+            textStyle: {
+              color: 'black'
+            }
+          }
+        },
+        labelLine: {
+          normal: {
+            lineStyle: {
+              color: 'black'
+            }
+          }
+        }
+      }
+    ]
+  };
+
+  // 设置图表选项
+  myChart.setOption(option);
+</script>
+</body>
+</html>

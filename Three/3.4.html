@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>堆叠直方图</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .bar {
+      transition: .3s;
+    }
+    .bar:hover {
+      opacity: 0.7;
+    }
+    .axis--x path {
+      display: none;
+    }
+    h1{
+      margin-left: 300px;
+    }
+  </style>
+</head>
+<body>
+<h1 style="text-align:left">堆叠直方图</h1>
+<svg width="800" height="400"></svg>
+<script>
+  const data = [
+    { date: "Mon", food: 30, transportation: 40, education: 50 },
+    { date: "Tue", food: 20, transportation: 80, education: 100 },
+    { date: "Wed", food: 20, transportation: 50, education: 80 },
+    { date: "Thu", food: 10, transportation: 30, education: 40 },
+    { date: "Fri", food: 15, transportation: 20, education: 35 },
+    { date: "Sat", food: 10, transportation: 30, education: 70 },
+    { date: "Sun", food: 20, transportation: 50, education: 60 }
+  ];
+
+  const margin = { top: 50, right: 50, bottom: 30, left: 60 };
+  const width = 800 - margin.left - margin.right;
+  const height = 400 - margin.top - margin.bottom;
+
+  const svg = d3.select("svg")
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  const x = d3.scaleBand()
+    .domain(data.map(d => d.date))
+    .range([0, width])
+    .padding(0.1);
+
+  const y = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d.food + d.transportation + d.education)])
+    .nice()
+    .range([height, 0]);
+
+  const color = d3.scaleOrdinal()
+    .domain(['food', 'transportation', 'education'])
+    .range(["#1299e1", "#b6572e", "#319819"]);
+
+  const stack = d3.stack()
+    .keys(["food", "transportation", "education"]);
+
+  const series = stack(data);
+
+  svg.selectAll(".layer")
+    .data(series)
+    .enter().append("g")
+    .attr("class", "layer")
+    .attr("fill", (d, i) => color(i))
+    .selectAll("rect")
+    .data(d => d)
+    .enter().append("rect")
+    .attr("x", d => x(d.data.date))
+    .attr("y", d => y(d[1]))
+    .attr("height", d => y(d[0]) - y(d[1]))
+    .attr("width", x.bandwidth());
+
+  // 添加 X 轴
+  const xAxis = svg.append("g")
+    .attr("class", "axis axis--x")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x));
+
+  // 添加 Y 轴
+  const yAxis = svg.append("g")
+    .attr("class", "axis axis--y")
+    .call(d3.axisLeft(y));
+
+  // 添加 X 轴标题，放在坐标最右面
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("x", width)  // 将 x 设置为 width，使其位于最右侧
+    .attr("y", height + margin.bottom - 10)
+    .attr("text-anchor", "end")  // 右对齐
+    .text("日期");
+
+  // 添加 Y 轴标题，向外移动
+  svg.append("text")
+    .attr("class", "axis-label")
+    .attr("transform", "rotate(-90)") // 旋转 -90 度
+    .attr("y", margin.left-100) // 向外移动，增加 y 值
+    .attr("x", -height / 2)
+    .attr("text-anchor", "left")
+    .text("每日支出（元）");
+
+</script>
+</body>
+</html>

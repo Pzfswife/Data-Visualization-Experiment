@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>5.5</title>
+  <style>
+    svg {
+      border: 1px solid #ccc;
+    }
+
+    .tooltip {
+      position: absolute;
+      text-align: center;
+      width: 80px;
+      height: 28px;
+      padding: 2px;
+      font-size: 12px;
+      background: lightsteelblue;
+      border-radius: 8px;
+      pointer-events: none;
+      opacity: 0;
+    }
+
+    .legend {
+      font-size: 14px;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .legend-item {
+      margin-right: 20px;
+    }
+  </style>
+</head>
+
+<body>
+<svg width="800" height="500"></svg>
+<div class="legend"></div>
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+  const data = [
+    { year: 2015, normalHigherEdu: 504, secondaryVocEdu: 656, normalHighSchool: 878 },
+    { year: 2016, normalHigherEdu: 546, secondaryVocEdu: 748, normalHighSchool: 871 },
+    { year: 2017, normalHigherEdu: 566, secondaryVocEdu: 810, normalHighSchool: 840 },
+    { year: 2018, normalHigherEdu: 608, secondaryVocEdu: 812, normalHighSchool: 837 },
+    { year: 2019, normalHigherEdu: 640, secondaryVocEdu: 874, normalHighSchool: 830 },
+  ];
+
+  const margin = { top: 20, right: 160, bottom: 70, left: 30 };
+  const width = 800 - margin.left - margin.right;
+  const height = 500 - margin.top - margin.bottom;
+
+  const colors = { normalHigherEdu: "blue", secondaryVocEdu: "orange", normalHighSchool: "green" };
+  const stack = d3.stack().keys(Object.keys(colors))(data);
+
+  const xScale = d3.scaleBand()
+    .domain(data.map(d => d.year))
+    .range([0, width])
+    .padding(0.1);
+
+  const yScale = d3.scaleLinear()
+    .domain([0, d3.max(stack, s => d3.max(s, d => d[1]))])
+    .nice()
+    .range([height, 0]);
+
+  const svg = d3.select("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+  svg.append("g")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(xScale));
+
+  svg.append("g")
+    .call(d3.axisLeft(yScale));
+
+  const tooltip = d3.select("body").append("div").attr("class", "tooltip");
+
+  const drag = d3.drag()
+    .on("drag", function (event) {
+      const rect = d3.select(this);
+      const newX = Math.max(0, Math.min(parseFloat(rect.attr('x')) + event.dx, width - rect.attr('width')));
+      const newY = Math.max(0, Math.min(parseFloat(rect.attr('y')) + event.dy, height - rect.attr('height')));
+      rect.attr('x', newX).attr('y', newY);
+    });
+
+  svg.selectAll(".layer")
+    .data(stack)
+    .enter().append("g")
+    .attr("fill", d => colors[d.key])
+    .selectAll("rect")
+    .data(d => d)
+    .enter().append("rect")
+    .attr("x", d => xScale(d.data.year))
+    .attr("y", d => yScale(d[1]))
+    .attr("height", d => yScale(d[0]) - yScale(d[1]))
+    .attr("width", xScale.bandwidth())
+    .on("mouseenter", function (event, d) {
+      tooltip.style("opacity", 1)
+        .html(`支出: ${d[1] - d[0]}`)
+        .style("left", `${event.pageX + 5}px`)
+        .style("top", `${event.pageY - 28}px`);
+      d3.select(this).style("fill", "yellow");
+    })
+    .on("mouseleave", function () {
+      tooltip.style("opacity", 0);
+      d3.select(this).style("fill", null);
+    })
+    .call(drag);
+
+  d3.select("svg")
+    .call(d3.zoom().scaleExtent([0.5, 5]).on("zoom", event => {
+      svg.attr("transform", event.transform);
+    }));
+
+  d3.select(".legend").selectAll(".legend-item")
+    .data(Object.entries(colors))
+    .enter().append("div")
+    .attr("class", "legend-item")
+    .html(([key, color]) => `<span style="display:inline-block;width:20px;height:20px;background-color:${color};"></span> ${{
+      normalHigherEdu: '普通高等教育',
+      secondaryVocEdu: '中等职业教育',
+      normalHighSchool: '普通高中'
+    }[key]}`);
+</script>
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3.js 折线图</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+    .axis text {
+      font-family: sans-serif;
+      font-size: 10px;
+    }
+    .line {
+      fill: none;
+      stroke-width: 2;
+    }
+    .legend rect {
+      cursor: pointer;
+    }
+    .legend text {
+      font-family: sans-serif;
+      font-size: 10px;
+      margin-left: 5px;
+    }
+    .x-label,
+    .y-label {
+      font-family: sans-serif;
+      font-size: 15px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<svg id="myChart" width="800" height="400"></svg>
+<script>
+  // 数据
+  var dataset = [
+    {
+      country: "旅行社数(个)",
+      gdp: [
+        [2009, 20399], [2010, 22784], [2011, 23690],
+        [2012, 24944], [2013, 26054],[2014,26650],
+        [2015,27621],[2016,2739],[2017,0],[2018,0]
+      ]
+    },
+    {
+      country: "国内旅游总花费(亿元)",
+      gdp: [
+        [2009,10183.7], [2010,12579.77], [2011,19305.39],
+        [2012,22706.2], [2013,26276.1],[2014,30311.9],
+        [2015,34195.1],[2016,39390],[2017,45660.77],[2018,51278]
+      ]
+    }
+  ];
+
+  // 画布尺寸和边距
+  const margin = { top: 20, right: 260, bottom: 40, left: 80 };
+  const width = +d3.select('#myChart').attr('width') - margin.left - margin.right;
+  const height = +d3.select('#myChart').attr('height') - margin.top - margin.bottom;
+
+  const svg = d3.select('#myChart')
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // 定义x和y轴比例尺
+  const x = d3.scaleLinear()
+    .range([0, width])
+    .domain([2009, 2018]);
+
+  const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([0, d3.max(dataset, d => d3.max(d.gdp, v => v[1]))]);
+
+  // 添加x轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x).ticks(10).tickFormat(d3.format('d')));
+
+  // 添加y轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .call(d3.axisLeft(y).tickFormat(d => d + ' 万'));
+
+  // 添加横轴标签
+  svg.append('text')
+    .attr('class', 'x-label')
+    .attr('x', width / 2)
+    .attr('y', height + margin.bottom - 10)
+    .attr('text-anchor', 'middle')
+    .text('年份');
+
+  // 添加纵轴标签
+  svg.append('text')
+    .attr('class', 'y-label')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', -margin.left + 15)
+    .attr('x', -height / 2)
+    .attr('text-anchor', 'middle')
+    .text('数量');
+
+  // 定义线条生成器
+  const line = d3.line()
+    .x(d => x(d[0]))
+    .y(d => y(d[1]));
+
+  // 添加折线
+  dataset.forEach((data, index) => {
+    const lineColor = index === 0 ? 'blue' : 'orange';
+
+    svg.append('path')
+      .datum(data.gdp)
+      .attr('class', 'line')
+      .attr('d', line)
+      .style('stroke', lineColor);
+
+    // 添加图例
+    svg.append('text')
+      .attr('x', width + 50)
+      .attr('y', 20 + index * 20)
+      .text(data.country)
+      .style('fill', lineColor);
+
+    svg.append('rect')
+      .attr('x', width +30)
+      .attr('y', 10 + index * 20)
+      .attr('width', 12)
+      .attr('height', 12)
+      .style('fill', lineColor);
+  });
+
+  // 添加标题
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', -6)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '16px')
+    .text('旅游指标统计折线图');
+
+</script>
+</body>
+</html>

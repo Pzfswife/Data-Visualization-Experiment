@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>入境游客柱状图</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+    .axis text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+    .bar {
+      opacity: 0.7;
+    }
+    .legend rect {
+      cursor: pointer;
+    }
+    .legend text {
+      font-family: sans-serif;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .x-label,
+    .y-label {
+      font-family: sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<svg id="myChart" width="800" height="400"></svg>
+<script>
+  // 数据
+  const data = [
+    { year: '2009年', total: 12647.59, foreign: 2193.75, hongkongMacau: 10005.44, taiwan: 448.4 },
+    { year: '2010年', total: 13376.22, foreign: 2612.69, hongkongMacau: 10249.48, taiwan: 514.06 },
+    { year: '2011年', total: 13542.35, foreign: 2711.2, hongkongMacau: 10304.85, taiwan: 526.3 },
+    { year: '2012年', total: 13240.53, foreign: 2719.16, hongkongMacau: 9987.35, taiwan: 534.02 },
+    { year: '2013年', total: 12907.78, foreign: 2629.03, hongkongMacau: 9762.5, taiwan: 516.25 },
+    { year: '2014年', total: 12849.83, foreign: 2636.08, hongkongMacau: 9677.16, taiwan: 536.59 },
+    { year: '2015年', total: 13382.04, foreign: 2598.54, hongkongMacau: 10233.64, taiwan: 549.86 },
+    { year: '2016年', total: 13844.38, foreign: 2815.12, hongkongMacau: 10456.26, taiwan: 573 },
+    { year: '2017年', total: 13948.24, foreign: 2916.53, hongkongMacau: 10444.59, taiwan: 587.13 },
+    { year: '2018年', total: 14120, foreign: 0, hongkongMacau: 0, taiwan: 0 },
+  ];
+
+  // 画布尺寸和边距
+  const margin = { top: 20, right: 80, bottom: 40, left: 60 };
+  const width = +d3.select('#myChart').attr('width') - margin.left - margin.right;
+  const height = +d3.select('#myChart').attr('height') - margin.top - margin.bottom;
+
+  const svg = d3.select('#myChart')
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // 定义x和y轴比例尺
+  const x0 = d3.scaleBand()
+    .range([0, width])
+    .padding(0.1)
+    .domain(data.map(d => d.year));
+
+  const x1 = d3.scaleBand()
+    .padding(0.05)
+    .domain(['total','foreign', 'hongkongMacau', 'taiwan'])
+    .range([0, x0.bandwidth()]);
+
+  const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([0, d3.max(data, d => d.total)]);
+
+  // 添加x轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x0));
+
+  // 添加y轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .call(d3.axisLeft(y).tickFormat(d => d + '万'));
+
+  // 添加横轴标签
+  svg.append('text')
+    .attr('class', 'x-label')
+    .attr('x', width / 2)
+    .attr('y', height + margin.bottom - 10)
+    .attr('text-anchor', 'middle')
+    .text('年份');
+
+  // 添加纵轴标签
+  svg.append('text')
+    .attr('class', 'y-label')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', -margin.left + 10)
+    .attr('x', -height / 2)
+    .attr('text-anchor', 'middle')
+    .text('入境游客数量（万）');
+
+  // 为每个类别添加柱状图
+  const color = d3.scaleOrdinal()
+    .domain(['total','foreign', 'hongkongMacau', 'taiwan'])
+    .range(['orange','blue', 'green', 'purple']);
+
+  const groups = svg.selectAll('.group')
+    .data(data)
+    .enter().append('g')
+    .attr('class', 'group')
+    .attr('transform', d => `translate(${x0(d.year)},0)`);
+
+  groups.selectAll('rect')
+    .data(d => ['total','foreign', 'hongkongMacau', 'taiwan'].map(key => ({ key, value: d[key] })))
+    .enter().append('rect')
+    .attr('class', 'bar')
+    .attr('x', d => x1(d.key))
+    .attr('y', d => y(d.value))
+    .attr('width', x1.bandwidth())
+    .attr('height', d => height - y(d.value))
+    .attr('fill', d => color(d.key));
+
+  // 添加图例
+  const legend = svg.selectAll('.legend')
+    .data(['total','foreign', 'hongkongMacau', 'taiwan'])
+    .enter().append('g')
+    .attr('class', 'legend')
+    .attr('transform', (d, i) => `translate(0,${i * 20})`);
+
+  legend.append('rect')
+    .attr('x', width+60)
+    .attr('width', 18)
+    .attr('height', 18)
+    .style('fill', d => color(d));
+
+  legend.append('text')
+    .attr('x', width +60)
+    .attr('y', 9)
+    .attr('dy', '.35em')
+    .style('text-anchor', 'end')
+    .text(d => {
+      switch (d) {
+        case 'total':
+          return '入境游客';
+        case 'foreign':
+          return '外国人入境游客';
+        case 'hongkongMacau':
+          return '港澳同胞入境游客';
+        case 'taiwan':
+          return '台湾同胞入境游客';
+      }
+    });
+
+  // 添加标题
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', -6)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '16px')
+    .text('入境游客统计图');
+
+</script>
+</body>
+</html>

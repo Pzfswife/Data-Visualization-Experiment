@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>国内旅游消费柱状图</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style>
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: black;
+      shape-rendering: crispEdges;
+    }
+    .axis text {
+      font-family: sans-serif;
+      font-size: 11px;
+    }
+    .bar {
+      opacity: 0.7;
+    }
+    .legend rect {
+      cursor: pointer;
+    }
+    .legend text {
+      font-family: sans-serif;
+      font-size: 12px;
+      margin-left: 5px;
+    }
+    .x-label,
+    .y-label {
+      font-family: sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+<svg id="myChart" width="900" height="400"></svg>
+<script>
+  // 数据
+  const data = [
+    { year: '2009年', domestic: 0, urban: 0, rural: 0 },
+    { year: '2010年', domestic: 535.4, urban: 801.1, rural: 295.3 },
+    { year: '2011年', domestic: 598.2, urban: 883, rural: 306 },
+    { year: '2012年', domestic: 731, urban: 887.8, rural: 471.4},
+    { year: '2013年', domestic: 767.9, urban: 914.5, rural: 491 },
+    { year: '2014年', domestic: 805.5, urban: 946.6, rural: 518.9},
+    { year: '2015年', domestic: 839.7, urban: 975.5, rural: 540.2 },
+    { year: '2016年', domestic: 857, urban: 985.5, rural: 554.2 },
+    { year: '2017年', domestic: 888.2, urban: 1009.1, rural: 576.4 },
+    { year: '2018年', domestic: 913, urban: 1024.6, rural: 603.3 }
+  ];
+
+  // 画布尺寸和边距
+  const margin = { top: 20, right: 200, bottom: 40, left: 60 };
+  const width = +d3.select('#myChart').attr('width') - margin.left - margin.right;
+  const height = +d3.select('#myChart').attr('height') - margin.top - margin.bottom;
+
+  const svg = d3.select('#myChart')
+    .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // 定义x和y轴比例尺
+  const x0 = d3.scaleBand()
+    .range([0, width])
+    .padding(0.1)
+    .domain(data.map(d => d.year));
+
+  const x1 = d3.scaleBand()
+    .padding(0.05)
+    .domain(['domestic', 'urban', 'rural'])
+    .range([0, x0.bandwidth()]);
+
+  const y = d3.scaleLinear()
+    .range([height, 0])
+    .domain([0, d3.max(data, d => Math.max(d.domestic, d.urban, d.rural))]);
+
+  // 添加x轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .attr('transform', `translate(0,${height})`)
+    .call(d3.axisBottom(x0));
+
+  // 添加y轴
+  svg.append('g')
+    .attr('class', 'axis')
+    .call(d3.axisLeft(y).tickFormat(d => d + '元'));
+
+  // 添加横轴标签
+  svg.append('text')
+    .attr('class', 'x-label')
+    .attr('x', width / 2)
+    .attr('y', height + margin.bottom - 10)
+    .attr('text-anchor', 'middle')
+    .text('年份');
+
+  // 添加纵轴标签
+  svg.append('text')
+    .attr('class', 'y-label')
+    .attr('transform', 'rotate(-90)')
+    .attr('y', -margin.left + 10)
+    .attr('x', -height / 2)
+    .attr('text-anchor', 'middle')
+    .text('人均消费 (元)');
+
+  // 为每个类别添加柱状图
+  const color = d3.scaleOrdinal()
+    .domain(['domestic', 'urban', 'rural'])
+    .range(['red', 'purple', 'green']);
+
+  const groups = svg.selectAll('.group')
+    .data(data)
+    .enter().append('g')
+    .attr('class', 'group')
+    .attr('transform', d => `translate(${x0(d.year)},0)`);
+
+  groups.selectAll('rect')
+    .data(d => ['domestic', 'urban', 'rural'].map(key => ({ key, value: d[key] })))
+    .enter().append('rect')
+    .attr('class', 'bar')
+    .attr('x', d => x1(d.key))
+    .attr('y', d => y(d.value))
+    .attr('width', x1.bandwidth())
+    .attr('height', d => height - y(d.value))
+    .attr('fill', d => color(d.key));
+
+  // 添加图例
+  const legend = svg.selectAll('.legend')
+    .data(['domestic', 'urban', 'rural'])
+    .enter().append('g')
+    .attr('class', 'legend')
+    .attr('transform', (d, i) => `translate(0,${i * 20})`);
+
+  legend.append('rect')
+    .attr('x', width + 100)
+    .attr('width', 18)
+    .attr('height', 18)
+    .style('fill', d => color(d));
+
+  legend.append('text')
+    .attr('x', width + 100)
+    .attr('y', 9)
+    .attr('dy', '.35em')
+    .style('text-anchor', 'end')
+    .text(d => {
+      switch (d) {
+        case 'domestic':
+          return '国内旅游消费';
+        case 'urban':
+          return '城镇人均旅游消费';
+        case 'rural':
+          return '农村人均旅游消费';
+      }
+    });
+
+  // 添加标题
+  svg.append('text')
+    .attr('x', width / 2)
+    .attr('y', -6)
+    .attr('text-anchor', 'middle')
+    .style('font-size', '16px')
+    .text('国内旅游消费统计图');
+
+</script>
+</body>
+</html>

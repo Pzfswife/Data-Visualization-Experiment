@@ -1,0 +1,41 @@
+{
+  "name": "学习D3",
+  "children": [
+    {
+      "name": "预备知识",
+      "children": [
+        {"name": "HTML&CSS"},
+        {"name": "Javacript"},
+        {"name": "DOM"},
+        {"name": "SVG"}
+      ]
+    },
+    {
+      "name": "入门知识",
+      "children": [
+        {"name": "绑定数据"},
+        {"name": "文档结构"},
+        {"name": "基本图形"},
+        {"name": "色彩使用"}
+      ]
+    },
+    {
+      "name": "绘制基本图形",
+      "children": [
+        {"name": "柱状图"},
+        {"name": "环形图"},
+        {"name": "折线图"},
+        {"name": "树图"}
+      ]
+    },
+    {
+      "name": "高阶知识",
+      "children": [
+        {"name": "动画"},
+        {"name": "动态效果"},
+        {"name": "交互式"},
+        {"name": "布局 layout"}
+      ]
+    }
+  ]
+}
