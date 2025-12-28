@@ -1,0 +1,14 @@
+<html>
+<head>
+    <title>结果</title>
+</head>
+<body>
+    <h1>结果</h1>
+    <p id="result"></p>
+
+    <script>
+        let result = sessionStorage.getItem("result");
+        document.getElementById("result").innerText = "结果为: " + result;
+    </script>
+</body>
+</html>

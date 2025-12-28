@@ -1,0 +1,28 @@
+<html>
+<head>
+    <title>加三</title>
+</head>
+<body>
+    <h1>加三</h1>
+    <label for="inputNumber">请输入一个数字:</label>
+    <input type="text" id="inputNumber" oninput="transformNumber()"><br><br>
+    
+    <label for="outputNumber">结果为:</label>
+    <input type="text" id="outputNumber" readonly>
+
+    <script>
+        function transformNumber() {
+            let inputNumber = document.getElementById("inputNumber").value;
+            let outputNumber = "";
+
+            for (let i = 0; i < inputNumber.length; i++) {
+                let digit = parseInt(inputNumber[i]);
+                let transformedDigit = (digit + 3);
+                outputNumber += transformedDigit;
+            }
+
+            document.getElementById("outputNumber").value = outputNumber;
+        }
+    </script>
+</body>
+</html>

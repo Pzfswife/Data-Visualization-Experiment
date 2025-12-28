@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>注册界面</title>
+    <style type="text/css">
+        form{
+            padding-left:600px;
+        }
+        h2{
+            padding-left:670px;
+        }
+        button{
+            margin-left:100px;
+        }
+    </style>
+</head>
+<body>
+    <h2>注册界面</h2>
+    
+    <form id="loginForm" onsubmit="return validateForm()">
+        用户名:<input type="text" id="username" name="username" required><br><br>
+        
+        密码:<input type="password" id="password" name="password" required><br><br>
+        
+        <button>注册</button>
+    </form>
+
+    <script>
+        function validateForm() {
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+
+            // 在这里添加您的账号密码验证逻辑
+            if (username === "a" && password === "1") {
+                alert("注册成功！");
+                return true;
+            } else {
+                alert("注册失败，请重试。");
+                return false;
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+<p>两个数的简易计算</p>
+
+<input type="number" id="num1" />
+<input type="button" value="+" onclick="operate('+')" />
+<input type="button" value="-" onclick="operate('-')" />
+<input type="button" value="*" onclick="operate('*')" />
+<input type="button" value="/" onclick="operate('/')" />
+<input type="number" id="num2" />
+<input type="button" value="=" onclick="calculate()" />
+
+<input type="text" id="result" readonly />
+
+<script>
+    var operator;
+
+    function operate(op) {
+        operator = op;
+    }
+
+    function calculate() {
+        var num1 = parseFloat(document.getElementById("num1").value);
+        var num2 = parseFloat(document.getElementById("num2").value);
+
+        if (operator === '+') {
+            document.getElementById("result").value = num1 + num2;
+        } else if (operator === '-') {
+            document.getElementById("result").value = num1 - num2;
+        } else if (operator === '*') {
+            document.getElementById("result").value = num1 * num2;
+        } else if (operator === '/') {
+            if (num2!== 0) {
+                document.getElementById("result").value = num1 / num2;
+            } else {
+                document.getElementById("result").value = "除数不能为 0";
+            }
+        }
+    }
+</script>
+
+</body>
+
+</html>
